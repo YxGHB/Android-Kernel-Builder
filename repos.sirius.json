@@ -1,0 +1,13 @@
+{
+  "kernel": {
+    "repo": "https://github.com/YxGHB/kernel_xiaomi_sdm710-1.git",
+    "branch": "main",
+    "defconfig": "sirius_defconfig"
+  },
+  "compiler": {
+    "gcc_version": "10"
+  },
+  "output": {
+    "zip_name": "Xiaomi8SE-Kernel-sirius"
+  }
+}
