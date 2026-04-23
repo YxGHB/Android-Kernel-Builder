@@ -4,6 +4,10 @@
     "branch": "main",
     "defconfig": "sirius_defconfig"
   },
+  "anykernel": {
+    "repo": "https://github.com/osm0sis/AnyKernel3.git",
+    "branch": "master"
+  },
   "compiler": {
     "gcc_version": "10"
   },
