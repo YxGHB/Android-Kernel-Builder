@@ -9,8 +9,10 @@ jobs:
       - name: 安装依赖
         run: |
           sudo apt update
-          sudo apt install -y bc bison ca-certificates flex gcc git make libssl-dev zip 
-          sudo apt install -y libdebuginfod1
+          sudo apt update
+          sudo apt install -y bc bison build-essential flex libelf-dev libssl-dev gcc-aarch64-linux-gnu
+          # sudo apt install -y bc bison ca-certificates flex gcc git make libssl-dev zip 
+          # sudo apt install -y libdebuginfod1
 
       - name: 下载编译器
         run: |
@@ -26,9 +28,12 @@ jobs:
           cd kernel
           export PATH=$GITHUB_WORKSPACE/gcc64/bin:$PATH
           export ARCH=arm64
-          export CROSS_COMPILE=aarch64-elf-
-          make sirius_defconfig
-          make -j$(nproc) HOSTCFLAGS="-fcommon -Wno-error" CFLAGS="-Wno-error -w"
+          # export CROSS_COMPILE=aarch64-elf-
+          export CROSS_COMPILE=aarch64-linux-gnu-
+          # make sirius_defconfig
+          make O=out sdm710_defconfig
+          make O=out -j$(nproc) KCFLAGS="-Wno-array-bounds -Wno-error"
+          # make -j$(nproc) HOSTCFLAGS="-fcommon -Wno-error" CFLAGS="-Wno-error -w"
       - name: 拉取AnyKernel3打包
         run: |
           git clone https://github.com/osm0sis/AnyKernel3.git --depth=1
