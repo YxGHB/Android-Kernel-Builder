@@ -27,7 +27,7 @@ jobs:
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-elf-
           make sirius_defconfig
-          make -j$(nproc)
+          make -j$(nproc) HOSTCFLAGS=-fcommon
 
       - name: 拉取AnyKernel3打包
         run: |
