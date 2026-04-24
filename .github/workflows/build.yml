@@ -9,7 +9,8 @@ jobs:
       - name: 安装依赖
         run: |
           sudo apt update
-          sudo apt install -y bc bison ca-certificates flex gcc git make libssl-dev zip
+          sudo apt install -y bc bison ca-certificates flex gcc git make libssl-dev zip 
+          sudo apt install -y libdebuginfod1
 
       - name: 下载编译器
         run: |
