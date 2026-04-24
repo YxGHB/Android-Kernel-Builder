@@ -1,29 +1,31 @@
 name: Build Xiaomi SDM710 Kernel
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:  # 手动触发按钮
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libelf-dev libssl-dev gcc-aarch64-linux-gnu
+          sudo apt install -y bc bison build-essential flex libelf-dev libssl-dev gcc-aarch64-linux-gnu git
 
-      - name: Start compilation
+      - name: Clone kernel source
         run: |
+          git clone https://github.com/guoxiao1213/android_kernel_xiaomi_sdm710.git kernel
+          cd kernel
+
+      - name: Compile kernel
+        run: |
+          cd kernel
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
           make O=out xiaomi_sdm710_defconfig
           make O=out -j2 KCFLAGS="-Wno-array-bounds -Wno-error"
 
-      - name: Upload kernel
+      - name: Upload kernel file
         uses: actions/upload-artifact@v4
         with:
-          name: kernel-sdm710
-          path: out/arch/arm64/boot/Image.gz-dtb
+          name: Kernel-SDM710
+          path: kernel/out/arch/arm64/boot/Image.gz-dtb
