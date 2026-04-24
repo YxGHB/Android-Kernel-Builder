@@ -1,4 +1,4 @@
-name: Build Xiaomi SDM710 Kernel
+name: Build Xiaomi 8SE (Sirius) Kernel
 on:
   workflow_dispatch:
 
@@ -9,23 +9,22 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libelf-dev libssl-dev gcc-aarch64-linux-gnu git
+          sudo apt install -y bc bison build-essential flex libelf-dev libssl-dev gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf git
 
       - name: Clone kernel source
-        run: |
-          git clone https://github.com/guoxiao1213/android_kernel_xiaomi_sdm710.git kernel
-          cd kernel
+        run: git clone https://github.com/guoxiao1213/android_kernel_xiaomi_sdm710.git kernel
 
-      - name: Compile kernel (FINAL FIXED)
+      - name: Compile kernel (FINAL FINAL FIX)
         run: |
           cd kernel
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
+          export CROSS_COMPILE_ARM32=arm-linux-gnueabihf-
           make O=out vendor/sirius_defconfig
           make O=out -j2 KCFLAGS="-Wno-array-bounds -Wno-error"
 
-      - name: Upload kernel file
+      - name: Upload kernel
         uses: actions/upload-artifact@v4
         with:
-          name: Kernel-SDM710
+          name: Kernel-Sirius
           path: kernel/out/arch/arm64/boot/Image.gz-dtb
