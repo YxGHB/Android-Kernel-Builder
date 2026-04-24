@@ -16,12 +16,12 @@ jobs:
           git clone https://github.com/guoxiao1213/android_kernel_xiaomi_sdm710.git kernel
           cd kernel
 
-      - name: Compile kernel
+      - name: Compile kernel (FINAL FIXED)
         run: |
           cd kernel
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
-          make O=out xiaomi_sdm710_defconfig
+          make O=out sdm710_defconfig
           make O=out -j2 KCFLAGS="-Wno-array-bounds -Wno-error"
 
       - name: Upload kernel file
