@@ -28,8 +28,7 @@ jobs:
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-elf-
           make sirius_defconfig
-          make -j$(nproc) HOSTCFLAGS=-fcommon CFLAGS="-Wno-error=array-bounds -Wno-error=deprecated-declarations"
-
+          make -j$(nproc) HOSTCFLAGS="-fcommon -Wno-error" CFLAGS="-Wno-error -w"
       - name: 拉取AnyKernel3打包
         run: |
           git clone https://github.com/osm0sis/AnyKernel3.git --depth=1
