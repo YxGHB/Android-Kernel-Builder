@@ -1,48 +1,30 @@
-name: 编译小米8SE内核 (sirius)
+name: Build Xiaomi SDM710 Kernel
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-20.04
     steps:
-      - name: 安装依赖
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install dependencies
         run: |
-          sudo apt update
           sudo apt update
           sudo apt install -y bc bison build-essential flex libelf-dev libssl-dev gcc-aarch64-linux-gnu
-          # sudo apt install -y bc bison ca-certificates flex gcc git make libssl-dev zip 
-          # sudo apt install -y libdebuginfod1
 
-      - name: 下载编译器
+      - name: Start compilation
         run: |
-          git clone https://github.com/mvaisakh/gcc-arm64.git --depth=1 gcc64
-
-      - name: 拉取内核源码
-        run: |
-          git clone https://github.com/YxGHB/kernel_xiaomi_sdm710-1.git --depth=1 kernel
-          cd kernel
-
-      - name: 开始编译
-        run: |
-          cd kernel
-          export PATH=$GITHUB_WORKSPACE/gcc64/bin:$PATH
           export ARCH=arm64
-          # export CROSS_COMPILE=aarch64-elf-
           export CROSS_COMPILE=aarch64-linux-gnu-
-          # make sirius_defconfig
-          make O=out sdm710_defconfig
-          make O=out -j$(nproc) KCFLAGS="-Wno-array-bounds -Wno-error"
-          # make -j$(nproc) HOSTCFLAGS="-fcommon -Wno-error" CFLAGS="-Wno-error -w"
-      - name: 拉取AnyKernel3打包
-        run: |
-          git clone https://github.com/osm0sis/AnyKernel3.git --depth=1
-          cp kernel/arch/arm64/boot/Image.gz-dtb AnyKernel3/
-          cd AnyKernel3
-          zip -r9 Kernel-sirius.zip *
+          make O=out xiaomi_sdm710_defconfig
+          make O=out -j2 KCFLAGS="-Wno-array-bounds -Wno-error"
 
-      - name: 上传成品
+      - name: Upload kernel
         uses: actions/upload-artifact@v4
         with:
-          name: Kernel-sirius
-          path: AnyKernel3/*.zip
+          name: kernel-sdm710
+          path: out/arch/arm64/boot/Image.gz-dtb
