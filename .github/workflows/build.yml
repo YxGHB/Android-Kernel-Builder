@@ -21,7 +21,7 @@ jobs:
           cd kernel
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
-          make O=out sdm710_defconfig
+          make O=out vendor/sirius_defconfig
           make O=out -j2 KCFLAGS="-Wno-array-bounds -Wno-error"
 
       - name: Upload kernel file
